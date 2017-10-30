@@ -37,7 +37,7 @@ function Heart() {
 	this.sprite.position.set(this.pos_x, this.pos_y);
 	this.sprite.tint = heart_colours[this.colour];
 	this.sprite.visible = false;
-	this.sprite.rotation = 180;
+	this.sprite.rotation = Math.PI / 2 * 1;
 
 	this.shield_sprite = new PIXI.Sprite(shield_texture);
 	this.shield_sprite.anchor.set(0.5, 1.4);
