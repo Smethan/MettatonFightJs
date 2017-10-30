@@ -8,6 +8,7 @@ function init_game() {
 	box = new Box();
 	heart = new Heart();
 	menu = new Menu();
+	undyne = new Undyne();
 
 	gameplay_stage.addChild(hp_text);
 	gameplay_stage.addChild(time_text);
