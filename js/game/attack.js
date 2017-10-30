@@ -34,7 +34,7 @@ function switchAttackMode() {
 			for (var a = 0; a < arrows.length; ++a) {
 				arrows[a].sprite.visible = true;
 			}
-			heart.setColour("green");
+			heart.setColour("yellow");
 			break;
 		case "spear":
 			spear_interval = current_attack.interval;
