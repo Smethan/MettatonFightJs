@@ -140,7 +140,7 @@ GameState.prototype.restartGame = function(difficulty) {
 	box.dest_top = 240 - SHIELD_DISTANCE;
 	box.dest_bottom = 240 + SHIELD_DISTANCE;
 	heart.sprite.visible = true;
-	heart.shield_sprite.visible = false;
+	heart.shield_sprite.visible = true;
 
 	switch (difficulty) {
 		case "normal":
@@ -201,6 +201,74 @@ var annoyance = 0;
 function endGameText(diff, surv_time) {
 	switch (diff) {
 		case "normal":
+			if (surv_time < 6890) {
+				++annoyance;
+				switch (annoyance) {
+					case 1:
+						return [
+							{ text: "Look, I gave you\na shield for one\npurpose and one\npurpose only."},
+							{ text: "To DEFEND YOURSELF."},
+							{ text: "Can't get more\nstraightforward\nthan that."},
+						];
+					case 2:
+						return [
+							{ text: "Are you just doing\nthat on purpose?", face: 2 },
+							{ text: "Because it's not\nfunny. Stop it." },
+						];
+					default:
+						menu.disableEasyMode();
+						return [
+							{ text: "NGAHHHHHHH!", face: 3 },
+							{ text: "If you're not going\nto take this\nseriously...", face: 1 },
+							{ text: "I'm just going to\nhave to force you\nto try harder!", face: 3 },
+						];
+				}
+			} else if (surv_time < 60000)
+				return [
+					{ text: "Is that the best\nyou've got?" },
+					{ text: "Pathetic. I know you\ncan do better!" },
+				];
+			else if (surv_time < 120000)
+				return [
+					{ text: "Good, but still\nnot good enough." },
+					{ text: "Keep trying, human!\nReach for the top!" },
+				];
+			else {
+				menu.disableEasyMode();
+				return [
+					{ text: "You're doing well,\nbut only because I'm\ngoing easy on you." },
+					{ text: "It won't be so easy\nnext time!" },
+				];
+			}
+		case "hard":
+			if (surv_time < 60000)
+				return [
+					{ text: "Is that the best\nyou've got?" },
+					{ text: "Pathetic. I know you\ncan do better!" },
+				];
+			else if (surv_time < 120000)
+				return [
+					{ text: "Good, but still\nnot good enough." },
+					{ text: "Keep trying, human!\nReach for the top!" },
+				];
+			else
+				return [
+					{ text: "You're doing well." },
+					{ text: "But you can still\ndo better! Let me\ngo harder on you!" },
+				];
+		case "genocide":
+			return [
+				{ text: "You're going to have\nto try a little\nharder than THAT." },
+			];
+		case "aprilfools":
+			return [
+				{ text: "APRIL FOOLS,\nMOTHERFUCKERS!" },
+			];
+		default:
+			return [
+				{ text: "Is that the best\nyou've got?" },
+				{ text: "Pathetic. I know you\ncan do better!" },
+			];
 	}
 }
 
@@ -216,7 +284,49 @@ GameState.prototype.update = function(delta_ms) {
 		this.elapsed_time += delta_ms;
 		time_text.text = format_time_long(this.elapsed_time);
 
+		// arrows.update(delta_ms)
+		for (var a = 0; a < arrows.length; ++a) {
+			arrows[a].update(delta_ms / 1000);
+			if (arrows[a].removed) {
+				gameplay_stage.removeChild(arrows[a].sprite);
+				arrows.splice(a, 1);
+			}
+		}
 
+		// spears.update(delta_ms)
+		for (var a = 0; a < spears.length; ++a) {
+			spears[a].update(delta_ms);
+			if (spears[a].removed) {
+				gameplay_stage.removeChild(spears[a].sprite);
+				spears.splice(a, 1);
+			}
+		}
+
+		// pikes.update(delta_ms)
+		for (var a = 0; a < pikes.length; ++a) {
+			pikes[a].update(delta_ms);
+			if (pikes[a].removed) {
+				gameplay_stage.removeChild(pikes[a].sprite);
+				pikes.splice(a, 1);
+			}
+		}
+
+		var current_attack = attack_queue[0];
+		current_attack.time -= delta_ms / 1000;
+
+		if (current_attack.type == "spear") {
+			spear_time -= delta_ms;
+			if (spear_time <= 0) {
+				spear_time += spear_interval;
+				addNewSpear();
+			}
+		} else if (current_attack.type == "pike") {
+			pike_time -= delta_ms;
+			if (pike_time <= 0) {
+				pike_time += pike_interval;
+				addNewPike();
+			}
+		}
 
 		if (current_attack.time <= 0.4 + (current_attack.buffer_time || 0) &&
 			current_attack.type != attack_queue[1].type)
