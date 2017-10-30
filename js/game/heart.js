@@ -44,7 +44,7 @@ function Heart() {
 	this.shield_sprite.position.set(this.pos_x, this.pos_y);
 	this.shield_sprite.tint = 0xcdcdcd;
 	this.shield_sprite.rotation = Math.PI / 2 * (1 + this.shield_dir);
-	this.shield_sprite.visible = false;
+	this.shield_sprite.visible = true;
 
 	this.graphics = new PIXI.Graphics();
 	gameplay_stage.addChild(this.graphics);
@@ -148,7 +148,7 @@ Heart.prototype.setColour = function(colour) {
 		case "red":
 			this.shield_sprite.visible = false; break;
 		case "yellow":
-			this.shield_sprite.visible = false; break;
+			this.shield_sprite.visible = true; break;
 	}
 
 }
