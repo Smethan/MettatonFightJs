@@ -8,7 +8,7 @@ var undyne_legs_texture;
 var undyne_rightarm_texture;
 var undyne_leftarm_texture;
 var undyne_hair_textures = Array(4);
-
+var undyne;
 var speech_bubble_texture;
 var speech_bubble_text;
 
