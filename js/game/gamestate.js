@@ -209,7 +209,7 @@ GameState.prototype.update = function(delta_ms) {
 
 	box.update(delta_ms);
 	heart.update(delta_ms);
-	//undyne.update(delta_ms);
+	undyne.update(delta_ms);
 	menu.update(delta_ms);
 
 	if (this.state == "playing") {
